@@ -6,6 +6,7 @@ std::vector<cv::Point2f> GatherImagePoints(TrackedObject *to);
 std::vector<cv::Point3f> GatherObjectPoints(TrackedObject *to);
 bool isRotationMatrix(cv::Mat &R);
 std::vector<cv::Point3f> rotationMatrixToEulerAngles(cv::Mat &R);
+#define CV_EPNP 1
 
 void PoseCalculation(TrackedObject *to, Pose *pose)
 {

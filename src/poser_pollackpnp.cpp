@@ -1,11 +1,13 @@
 #include <survive.h>
 #include <stdio.h>
 #include <stdlib.h>
+extern "C" {
 #include "linmath.h"
+}
 #include <string.h>
 #include <stdint.h>
 #include <math.h>
-#include <dclapack.h>
+//#include <dclapack.h>
 #include "opencv_pose_calc.h"
 
 // QUESTION: what do I still need from this?
@@ -48,7 +50,7 @@ static FLT distance(Point a, Point b)
 static void QuickPose(SurviveObject *so)
 {
 	// get the poser data from SurviveObject
-	PollackPnPData * ppd = so->PoserData;
+	PollackPnPData * ppd = (PollackPnPData*)so->PoserData;
 
 	// only start polling for angles after receiving the first full packet
 	if (! so->ctx->bsd[0].OOTXSet)
@@ -58,7 +60,7 @@ static void QuickPose(SurviveObject *so)
 
 	TrackedObject * to;
 
-	to = malloc(sizeof(TrackedObject) + (SENSORS_PER_OBJECT * sizeof(TrackedSensor)));
+	to = (TrackedObject*) malloc(sizeof(TrackedObject) + (SENSORS_PER_OBJECT * sizeof(TrackedSensor)));
 
 	int sensorCount = 0;
 
@@ -104,7 +106,7 @@ static void QuickPose(SurviveObject *so)
 	/* printf("sensorCount: %zd\n", to->numSensors); */
 
 	Pose *pose;
-	pose = malloc(sizeof(Pose));
+	pose = (Pose*)malloc(sizeof(Pose));
 	if (sensorCount > 4)
 	{
 	  PoseCalculation(to, pose);
@@ -138,9 +140,9 @@ int PoserPollackPnP( SurviveObject * so, PoserData * pd )
 {
 	PoserType pt = pd->pt;
 	SurviveContext * ctx = so->ctx;
-	PollackPnPData * ppd = so->PoserData;
+	PollackPnPData * ppd = (PollackPnPData*)so->PoserData;
 
-	if( !ppd ) so->PoserData = ppd = malloc( sizeof( PollackPnPData ) );
+	if( !ppd ) so->PoserData = ppd = (PollackPnPData*)malloc( sizeof( PollackPnPData ) );
 
 	switch( pt )
 	{
@@ -198,5 +200,5 @@ int PoserPollackPnP( SurviveObject * so, PoserData * pd )
 	return 0;
 }
 
-
-REGISTER_LINKTIME( PoserPollackPnP );
+void * _PoserPollackPnP = (void *)PoserPollackPnP;
+REGISTER_LINKTIME(_PoserPollackPnP);

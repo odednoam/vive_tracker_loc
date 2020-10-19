@@ -57,6 +57,7 @@
 /*
  * Calculate L,U of a matrix A with pivot table
  */
+#ifdef ___USE_DCLA_LU
 #define LU(A,L,U,Piv,n) { \
     int i,j,k,_tempi; float _tempf; \
     for (i=0; i<n; i++) { Piv[i]=i; } \
@@ -90,7 +91,7 @@
         } \
     } \
 }
-
+#endif
 /*
  * Pivots a matrix to a different matrix
  *  B = Pivot(A) given table 'Piv'

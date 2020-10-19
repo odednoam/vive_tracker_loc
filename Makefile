@@ -1,5 +1,6 @@
 BASEFLAGS:=-Iinclude/survive -Iinclude/posecalc -I. -fPIC -g -O3 -Iredist -flto -DUSE_DOUBLE -rdynamic
 CFLAGS:=$(BASEFLAGS) -std=gnu99
+CXXFLAGS:=$(BASEFLAGS)
 LDFLAGS:=-L/usr/local/lib -lpthread -lz -lm -flto -g -lX11 -lusb-1.0
 
 POSERS:=src/poser_pollackpnp.o
